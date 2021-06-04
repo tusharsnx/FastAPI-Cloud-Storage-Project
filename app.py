@@ -1,11 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask,  render_template
 
 app = Flask(__name__)
 
-
-@app.route("/<username>")
-def index(username):
-	return f"<h1>html of {username}</h1>"
+@app.route("/")
+@app.route("/home")
+def index():
+	return render_template("index.html")
 
 @app.route("/login")
 def tushar():
