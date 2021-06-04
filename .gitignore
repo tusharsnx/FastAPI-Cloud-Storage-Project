@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 /venv/
+=======
+/api_development/
+__pycache__/
+>>>>>>> 3daaf5ffdc04a9b90e381efbb7ccd30de54a2ae1
