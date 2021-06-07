@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Query, Body
-from typing  import Optional, List
+from typing import List, Optional
+from fastapi import Body, FastAPI, Query
 from pydantic import BaseModel
 
 app = FastAPI()
