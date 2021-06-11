@@ -8,3 +8,4 @@ dbsession = sessionmaker(bind=engine)
 Base = declarative_base()
 
 Base.meta.create_all(engine)
+Column()
