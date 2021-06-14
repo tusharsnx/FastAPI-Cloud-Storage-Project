@@ -1,38 +1,45 @@
+import shutil
 from typing import List, Optional
-from fastapi import Body, FastAPI, Query
+from uuid import uuid4
+
+from fastapi import BackgroundTasks, Body, FastAPI, File, Query, UploadFile
 from pydantic import BaseModel
+
+from database.db import dbsession, Base, engine
+from database.schema import Files, Users
+from models import CreateUser
+from database.crud import create_file, get_users, create_user
 
 app = FastAPI()
 
-class Blogs(BaseModel):
-    title: str = "10"
-    body: str = "body"
-    published_at: Optional[bool]
-
-@app.get("/blogs")
-@app.get('/')
-def blogs(limit: int = 100, sort: Optional[str] = None):
-    return {"data" : limit, "sort": sort}
-
-@app.post("/blogs")
-def create_blogs(blog: Blogs):
-    return blog.title
+def file_save(file):
+    with open(f"uploaded/{file.filename}", "wb") as f:
+        shutil.copyfileobj(file.file, f)
 
 
-@app.get("/search")
-# need to explicit define q as query param or else default to body param due to q not being in [str, int, bool, float](singular types)
-def search_blogs(q: List[str] = Query(..., title="Tushar singh", description="Description")):
-    results = {"q":q}
-    return results
+@app.get("/users")
+def users_list(limit: int = 10):
+    return get_users(limit = limit)
 
-@app.get("/blogs/unpublished")
-def blog_unpublished(id: int):
-    return {"id": id, "data": {"name": "Tushar Singh", "age": 19}}
+@app.post("/users")
+def add_user(user: CreateUser):
+    response = create_user(user_id = user.user_id, name = user.user_id, password = user.password, username = user.username)
+    return {"user": response, "details": "Operation successful"}
 
-@app.get("/blogs/{id}")
-def blog_users(id: int):
-    return {"id": id, "data": {"name": "Tushar Singh", "age": 19}}
+@app.post("/{user_id}/files")
+def add_file(user_id: str,  task: BackgroundTasks, file: UploadFile = File(...)):
+    # 'file' attributes are filename, file(file-like object)
+    task.add_task(file_save, file = file)
+    response = create_file(path = f"uploaded/{file.filename}", 
+        user_id = user_id, 
+        name = file.filename
+    )
+    return response
 
-@app.get("/blogs/{id}/age")
-def user_age(id: int):
-    return {"id": id, "age": 19}
+Base.metadata.create_all(engine)
+    
+
+
+
+
+
