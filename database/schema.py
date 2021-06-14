@@ -35,7 +35,7 @@ class Files(Base):
         return f"file_name: {self.name}, file_path: {self.path}, date_added: {self.date_added}"
     
     def json(self):
-        return {"file_id": self.file_id, "file_name": self.name, "file_path": self.path, "date_added": self.date_added}
+        return {"file_id": self.file_id, "file_name": self.name, "file_path": self.path, "date_added": self.date_added, "user_id": self.user.user_id}
         
 
     
