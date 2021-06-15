@@ -1,12 +1,14 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette.background import BackgroundTasks
 from models import CreateUser
 from fastapi import HTTPException
 from database.crud import delete_user, get_files, read_user, read_users, create_user
 import utils
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(tags=["users"], prefix="/users")
 
+auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get("/", tags=["users"])
 def users_list(limit: int = 10):
@@ -14,7 +16,7 @@ def users_list(limit: int = 10):
 
 
 @router.get("/{user_id}", tags=["users"])
-def user_detail(user_id: str):
+def user_detail(user_id: str, username: str = Depends(auth)):
     response = read_user(user_id)
     if response is None:
         raise HTTPException(status_code=403, detail="user not found")

@@ -1,10 +1,14 @@
 from fastapi import APIRouter
+import requests
 from fastapi import BackgroundTasks, File, UploadFile, HTTPException
+from starlette.responses import FileResponse
 from database.crud import read_file, delete_file, create_file
+from fastapi.responses import FileResponse
 import utils
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(tags=["files"], prefix="/files")
-
+auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.post("/{user_id}")
 def add_file(user_id: str,  task: BackgroundTasks, file: UploadFile = File(...)):
@@ -32,3 +36,7 @@ def get_file(file_id: str):
         raise HTTPException(status_code=401, detail="file not found")
     else:
         return response
+
+# @router.get("/download/{file_id}", response_model=FileResponse)
+# def download_file(file_id: str):
+#     response = requests.get()
