@@ -5,7 +5,6 @@ from datetime import date
 from typing import Optional
 
 class CreateUser(BaseModel):
-    user_id: UUID = None
     name: str
     username: str
     password: str
