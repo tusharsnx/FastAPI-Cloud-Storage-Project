@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 import utils
 from fastapi.security import OAuth2PasswordBearer
 
-router = APIRouter(tags=["files"], prefix="/files")
+router = APIRouter(tags=["files"], prefix="/api/files")
 auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.post("/{user_id}")

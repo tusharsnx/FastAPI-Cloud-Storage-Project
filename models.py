@@ -8,6 +8,9 @@ class CreateUser(BaseModel):
     name: str
     username: str
     password: str
+
+class AuthUser(BaseModel):
+    username: str
     
 # class AddFile(BaseModel):
 # print(BlogsUpdate.schema())

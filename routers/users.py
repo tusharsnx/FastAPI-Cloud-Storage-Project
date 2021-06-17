@@ -6,7 +6,7 @@ from database.crud import delete_user, get_files, read_user, read_users, create_
 import utils
 from fastapi.security import OAuth2PasswordBearer
 
-router = APIRouter(tags=["users"], prefix="/users")
+router = APIRouter(tags=["users"], prefix="/api/users")
 
 scopes = {"user":"scopes"}
 
