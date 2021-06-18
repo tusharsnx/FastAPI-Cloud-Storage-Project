@@ -8,6 +8,6 @@ from fastapi.responses import HTMLResponse
 router = APIRouter()
 template = Jinja2Templates(directory="templates")
 
-@router.get("/home", response_class=HTMLResponse)
+@router.get("/login", response_class=HTMLResponse)
 async def index(request: Request):
-    return template.TemplateResponse("home.html", {"request": request})
+    return template.TemplateResponse("test_login.html", {"request": request})
