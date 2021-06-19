@@ -22,7 +22,7 @@ async def users_list(request: Request, limit: int = 10):
 async def user_detail(username: str):
     user_detail = read_user(username)
     if user_detail is None:
-        raise HTTPException(status_code=403, detail="user not found")
+        raise HTTPException(status_code=404, detail="user not found")
     return user_detail
 
 
@@ -30,7 +30,7 @@ async def user_detail(username: str):
 async def get_files_list(username: str):
     response = get_files(username)
     if response is None:
-        raise HTTPException(status_code = 401, detail = "user not found")
+        raise HTTPException(status_code=404, detail = "user not found")
     else:
         return response
 

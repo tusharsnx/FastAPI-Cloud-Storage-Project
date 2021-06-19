@@ -1,12 +1,14 @@
+from main import DOMAIN
 from fastapi import APIRouter, Depends
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from sqlalchemy.sql.coercions import expect_col_expression_collection
-from starlette.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from models import User
 from .authorization import auth
+import aiohttp
+# from ..main import DOMAIN
 
+DOMAIN = "http://localhost:8000"
 
 router = APIRouter()
 template = Jinja2Templates(directory="templates")
@@ -48,3 +50,11 @@ async def logout(request: Request):
 def file_download(file_id: int):
     pass
     # file_details = await 
+
+@router.get("/dashboard")
+async def dashboard(request: Request, user: User = Depends(get_current_user)):
+    user_files = None
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"{DOMAIN}/api/users/{user.username}/files") as resp:
+            pass
+    return template.TemplateResponse("dashboard_test.html",{"request": request, "user": user.dict()})

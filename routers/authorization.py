@@ -1,13 +1,11 @@
-from fastapi import APIRouter
-from starlette.responses import HTMLResponse
+from fastapi import APIRouter, BackgroundTasks
 from models import User
 from fastapi.requests import Request
-from fastapi.responses import Response, RedirectResponse
+from fastapi.responses import Response, RedirectResponse, HTMLResponse
 from jose import jwt
 from uuid import uuid4
 import aiohttp
 import asyncio
-
 
 SECRET = "mysecret"
 CLIENT_ID = "722606380137-og8ok3tuotbrclko9fufih9ecdrb01a9.apps.googleusercontent.com"
@@ -37,6 +35,7 @@ class OAuth2Handler:
         loop = asyncio.get_event_loop()
         loop.create_task(self.load_urls())
 
+    # fetches auth, token granting url and issuer name
     async def load_urls(self):
         async with aiohttp.ClientSession() as session:
             async with session.get("https://accounts.google.com/.well-known/openid-configuration") as response:
@@ -63,6 +62,7 @@ class OAuth2Handler:
     def encode_token(self):
         pass
 
+    # verify the token and if valid returns the payload
     async def decode_token(self, token):
         key = None
         async with aiohttp.ClientSession() as session:
@@ -76,9 +76,7 @@ class OAuth2Handler:
             return None
         return data
 
-    def authenticate(self):
-        pass
-
+    # fetches access_token and id_token from the auth server
     async def get_token_details(self, code):
         token = None
 
@@ -109,7 +107,7 @@ async def login(response: Response):
 
 # callback url which receives code and create new user in the website
 @router.get("/callback")
-async def callback(request: Request, response: Response):
+async def callback(request: Request, response: Response, task: BackgroundTasks):
     
     # getting the code from query parameter
     code = request.query_params.get("code")
@@ -118,17 +116,11 @@ async def callback(request: Request, response: Response):
     token_details = await auth.get_token_details(code)
     decoded_data = await auth.decode_token(token_details["id_token"])
 
-    # creating new user in the database
-    async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}/api/users", data={"username": decoded_data["email"]}) as response:
-                user = await response.json()
-                if response.status_code!=200:
-                    data = { "username": decoded_data["email"], "name": decoded_data["name"]}
-                    async with session.post(f"{DOMAIN}/api/users", data=data) as response:
-                        user = await response.json()
+    # creating new user in the database if not exist
+    task.add_task(create_new_user, name=decoded_data["name"], username=decoded_data["email"])
     
     # redirecting to main page
-    response = RedirectResponse(url="{DOMAIN}/profile")
+    response = RedirectResponse(url=f"{DOMAIN}/profile")
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
 
@@ -138,6 +130,17 @@ async def logout(response: Response):
     response = RedirectResponse(url="http://localhost:8000/profile")
     response.delete_cookie("token")
     return response
+
+
+async def create_new_user(name, username):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"{DOMAIN}/api/users/{username}") as resp:
+            data = await resp.json()
+            print(data)
+            if resp.status!=200:
+                data = { "username": username, "name": name}
+                async with session.post(f"{DOMAIN}/api/users", json=data) as response2:
+                    print(response2.status)
 
 
 
