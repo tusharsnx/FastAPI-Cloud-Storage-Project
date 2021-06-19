@@ -5,11 +5,9 @@ from sqlalchemy.orm import relationship
 class Users(Base):
     __tablename__ = "users"
 
-    user_id = Column(String, primary_key=True)
+    user_id = Column(String, autoincrement=True)
     name = Column(String)
-    password = Column(String)
-    username = Column(String, unique=True)
-    # num_files = Column(Integer)
+    username = Column(String, primary_key=True, unique=True)
 
     files = relationship("Files", back_populates="user")
 
@@ -27,7 +25,7 @@ class Files(Base):
     name = Column(String)
     path = Column(String)
     date_added = Column(Date)
-    user_id = Column(ForeignKey("users.user_id"), nullable=True)
+    username = Column(ForeignKey("users.username"), nullable=True)
     
     user = relationship("Users", back_populates="files")
 
@@ -35,7 +33,7 @@ class Files(Base):
         return f"file_name: {self.name}, file_path: {self.path}, date_added: {self.date_added}"
     
     def json(self):
-        return {"file_id": self.file_id, "file_name": self.name, "file_path": self.path, "date_added": self.date_added, "user_id": self.user.user_id}
+        return {"file_id": self.file_id, "file_name": self.name, "file_path": self.path, "date_added": self.date_added, "username": self.user.username}
         
 
     

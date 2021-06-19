@@ -2,19 +2,19 @@ from .db import dbsession
 from .schema import Users, Files
 from uuid import uuid4
 from datetime import datetime
-from passlib.context import CryptContext
+# from passlib.context import CryptContext
 
-hasher = CryptContext(schemes=["bcrypt"])
+# hasher = CryptContext(schemes=["bcrypt"])
 
-
-def create_file(file_name: str, user_id: str):
-    if not read_user(user_id):
+# create user's file
+def create_file(file_name: str, username: str):
+    if not read_user(username):
         return None
     file_id = str(uuid4())
     date_added = datetime.now().date()
     response = dict()
     with dbsession() as session:
-        user = session.query(Users).filter(Users.user_id==user_id).first()
+        user = session.query(Users).filter(Users.username==username).first()
         file = Files(file_id=file_id, name=file_name, path=f"uploaded/{file_id}", date_added=date_added)
         file.user = user
         session.add(file)
@@ -22,7 +22,7 @@ def create_file(file_name: str, user_id: str):
         response = file.json()
     return response
 
-
+# returns users details upto limit
 def read_users(limit: int = 10):
     users_info= list()
     with dbsession() as session:
@@ -33,13 +33,15 @@ def read_users(limit: int = 10):
                 users_info.append(user_detail)
     return users_info
 
-def create_user(name: str, password: str, username: str):
+
+# creates user
+def create_user(name: str, username: str):
     response = dict()
     with dbsession() as session:
         user_id = str(uuid4())
-        user = Users(user_id=user_id, 
+        user = Users(
+            user_id=user_id, 
             name=name,
-            password=hasher.hash(password),
             username=username
         )
         session.add(user)
@@ -47,30 +49,35 @@ def create_user(name: str, password: str, username: str):
         response = user.json()
     return response
 
-def read_user(user_id: str):
+
+# returns user details
+def read_user(username: str):
     response =  None
     with dbsession() as session:
-        user = session.query(Users).filter(Users.user_id==user_id).first()
+        user = session.query(Users).filter(Users.username==username).first()
         if user is None:
             return None
         response = user.json()
     return response
 
-def get_files(user_id: str):
+
+# returns all user's files
+def get_files(username: str):
     with dbsession() as session:
-        if not read_user(user_id):
+        if not read_user(username):
             return None
-        result = session.query(Files).join(Users).filter(Users.user_id == user_id).all()
+        result = session.query(Files).join(Users).filter(Users.username == username).all()
         file_list = []
         for file in result:
             file_list.append(file.json())
 
     return file_list
 
-def delete_file(file_id: str):
+# deletes user's file
+def delete_file(file_id: str, username: str):
     response = None
     with dbsession() as session:
-        file = session.query(Files).filter(Files.file_id==file_id).first()
+        file = session.query(Files).join(Users).filter(Files.file_id==file_id, Users.username==username).first()
         if file is None:
             return response
         response=file.path
@@ -79,21 +86,24 @@ def delete_file(file_id: str):
     return response
  
 
-def read_file(file_id: str):
+# returns user's file details
+def read_file(file_id: str, username: str):
     response = dict()
     with dbsession() as session:
-        file = session.query(Files).filter(Files.file_id==file_id).first()
+        file = session.query(Files).join(Users).filter(Files.file_id==file_id, Users.username==username).first()
         if file is None:
             return None
         response = file.json()
     return response
 
-def delete_user(user_id: str):
-    if not read_user(user_id):
+
+# deletes user
+def delete_user(username: str):
+    if not read_user(username):
         return None 
     file_paths = []
     with dbsession() as session:
-        user = session.query(Users).filter(Users.user_id==user_id).first()
+        user = session.query(Users).filter(Users.username==username).first()
         for file in user.files:
             file_paths.append(file.path)
         session.delete(user)

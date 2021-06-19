@@ -4,12 +4,8 @@ import uuid
 from datetime import date
 from typing import Optional
 
-class CreateUser(BaseModel):
+class User(BaseModel):
     name: str
-    username: str
-    password: str
-
-class AuthUser(BaseModel):
     username: str
     
 # class AddFile(BaseModel):

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from starlette.background import BackgroundTasks
-from models import CreateUser
-from fastapi import HTTPException,  Cookie, Request
+from models import User
+from fastapi import HTTPException, Request
 from database.crud import delete_user, get_files, read_user, read_users, create_user
 import utils
 from fastapi.security import OAuth2PasswordBearer
@@ -12,41 +12,38 @@ scopes = {"user":"scopes"}
 
 auth = OAuth2PasswordBearer(tokenUrl="token")
 
-@router.get("/", tags=["users"])
-def users_list(request: Request, limit: int = 10, username: str = Depends(auth)):
-    return request.headers["Authorization"]
-    # return read_users(limit = limit)
+@router.get("/")
+async def users_list(request: Request, limit: int = 10):
+    # return request.headers["Authorization"]
+    return read_users(limit = limit)
 
 
-@router.get("/{user_id}", tags=["users"])
-def user_detail(user_id: str):
-    response = read_user(user_id)
-    if response is None:
+@router.get("/{username}")
+async def user_detail(username: str):
+    user_detail = read_user(username)
+    if user_detail is None:
         raise HTTPException(status_code=403, detail="user not found")
-    return response
+    return user_detail
 
 
-@router.get("/{user_id}/files", tags=["users"])
-def get_files_list(user_id: str):
-    response = get_files(user_id)
+@router.get("/{username}/files")
+async def get_files_list(username: str):
+    response = get_files(username)
     if response is None:
         raise HTTPException(status_code = 401, detail = "user not found")
     else:
         return response
 
 
-@router.post("/", tags=["users"])
-def add_user(user: CreateUser):
-    response = create_user(name=user.name, 
-        password=user.password, 
-        username=user.username
-    )
-    return {"user": response, "detail": "Operation successful"}
+@router.post("/")
+async def add_user(user: User):
+    user_detail = create_user(name=user.name, username=user.username)
+    return {"user": user_detail, "detail": "Operation successful"}
 
 
-@router.delete("/{user_id}", tags=["users"])
-def remove_user(user_id: str, task: BackgroundTasks):
-    response = delete_user(user_id = user_id)
+@router.delete("/{username}")
+async def remove_user(username: str, task: BackgroundTasks):
+    response = delete_user(username = username)
     if not response:
         raise HTTPException(400, detail="user not found!!")
     for path in response:

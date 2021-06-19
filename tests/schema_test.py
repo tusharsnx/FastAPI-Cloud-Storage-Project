@@ -1,5 +1,5 @@
-from database.db import dbsession
-from database.schema import Users, Files
+# from database.db import dbsession
+# from database.schema import Users, Files
 
 
 # with dbsession() as session:
@@ -20,3 +20,14 @@ from database.schema import Users, Files
     #     print(row.user_id)
     # print(user)
     # print(user2)
+
+olddict = {
+    "name": "Tisahr"
+}
+
+newdict = {
+    "name": "Tusahr",
+    "value": "tushr"
+}
+olddict.update(newdict)
+print(olddict)

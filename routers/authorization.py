@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from starlette.responses import HTMLResponse
-from models import AuthUser
+from models import User
 from fastapi.requests import Request
 from fastapi.responses import Response, RedirectResponse
-from jose import jws
+from jose import jwt
 from uuid import uuid4
 import aiohttp
 import asyncio
@@ -13,7 +13,8 @@ SECRET = "mysecret"
 CLIENT_ID = "722606380137-og8ok3tuotbrclko9fufih9ecdrb01a9.apps.googleusercontent.com"
 CLIENT_SECRET = "C6nN5q32iylE7SFtH5ZFNp4g"
 REDIRECT_URI = "http://localhost:8000/auth/callback"
-SCOPE = "openid email"
+SCOPE = "openid email profile"
+DOMAIN = "http://localhost:8000"
 
 
 class OAuth2Handler:
@@ -27,6 +28,14 @@ class OAuth2Handler:
         self.scope = scope
         self.authorization_endpoint = None
         self.jwks_uri = None
+        self.issuer = None
+        self.verification_options ={
+                'verify_sub': False,
+                'verify_at_hash': False,
+            }
+
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.load_urls())
 
     async def load_urls(self):
         async with aiohttp.ClientSession() as session:
@@ -35,16 +44,14 @@ class OAuth2Handler:
                 self.jwks_uri = response.get("jwks_uri")
                 self.authorization_endpoint = response.get("authorization_endpoint")
                 self.token_endpoint = response.get("token_endpoint")
+                self.issuer = response.get("issuer")
 
         
-
+    # creates payloads for exchanging code for id_token
     def token_request_payload(self, code):
         token_request_payload = {
-            "grant_type": "authorization_code",
-            "code": code,
-            "client_id": self.client_id,
-            "client_secret": self.client_secret,
-            "redirect_uri": self.redirect_url
+            "grant_type": "authorization_code", "code": code, "client_id": self.client_id, 
+            "client_secret": self.client_secret, "redirect_uri": self.redirect_url
         }
         return token_request_payload
 
@@ -61,7 +68,12 @@ class OAuth2Handler:
         async with aiohttp.ClientSession() as session:
             async with session.get(self.jwks_uri) as response:
                 key = await response.json()
-        data = jws.verify(token=token, key=key, algorithms="RS256")
+        try:
+            data = jwt.decode(token=token, key=key, algorithms="RS256", options=self.verification_options, 
+                issuer=self.issuer, audience=self.client_id
+                )
+        except:
+            return None
         return data
 
     def authenticate(self):
@@ -85,9 +97,8 @@ auth = OAuth2Handler(
     scope=SCOPE
     )
 
-loop = asyncio.get_event_loop()
-loop.create_task(auth.load_urls())
-router = APIRouter(prefix="/auth")
+
+router = APIRouter(prefix="/auth", tags=["authorization"])
 
 
 # redirects to auth server if not logged in
@@ -107,8 +118,18 @@ async def callback(request: Request, response: Response):
     token_details = await auth.get_token_details(code)
     decoded_data = await auth.decode_token(token_details["id_token"])
 
-    response = RedirectResponse(url="http://localhost:8000/profile")
-    response.set_cookie(key="id_token", value=token_details["id_token"], httponly=True)
+    # creating new user in the database
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"{DOMAIN}/api/users", data={"username": decoded_data["email"]}) as response:
+                user = await response.json()
+                if response.status_code!=200:
+                    data = { "username": decoded_data["email"], "name": decoded_data["name"]}
+                    async with session.post(f"{DOMAIN}/api/users", data=data) as response:
+                        user = await response.json()
+    
+    # redirecting to main page
+    response = RedirectResponse(url="{DOMAIN}/profile")
+    response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
 
 
