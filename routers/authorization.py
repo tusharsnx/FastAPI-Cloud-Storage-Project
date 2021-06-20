@@ -6,13 +6,25 @@ from jose import jwt
 from uuid import uuid4
 import aiohttp
 import asyncio
+import json
 
-SECRET = "mysecret"
-CLIENT_ID = "722606380137-og8ok3tuotbrclko9fufih9ecdrb01a9.apps.googleusercontent.com"
-CLIENT_SECRET = "C6nN5q32iylE7SFtH5ZFNp4g"
-REDIRECT_URI = "http://localhost:8000/auth/callback"
-SCOPE = "openid email profile"
-DOMAIN = "http://localhost:8000"
+# loading config for authorization
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+SECRET = config["SECRET"]
+CLIENT_ID = config["CLIENT_ID"]
+CLIENT_SECRET = config["CLIENT_SECRET"]
+REDIRECT_URI = config["REDIRECT_URI"]
+SCOPE = config["SCOPE"]
+DOMAIN = config["DOMAIN"]
+
+# SECRET = "mysecret"
+# CLIENT_ID = "722606380137-og8ok3tuotbrclko9fufih9ecdrb01a9.apps.googleusercontent.com"
+# CLIENT_SECRET = "C6nN5q32iylE7SFtH5ZFNp4g"
+# REDIRECT_URI = "http://localhost:8000/auth/callback"
+# SCOPE = "openid email profile"
+# DOMAIN = "http://localhost:8000"
 
 
 class OAuth2Handler:

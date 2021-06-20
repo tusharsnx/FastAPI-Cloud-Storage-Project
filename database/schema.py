@@ -15,7 +15,7 @@ class Users(Base):
         return f"name: {self.name}, username: {self.username}, file: {[file.name for file in self.files]}"
     
     def json(self):
-        return {"user_id": self.user_id, "name": self.name, "username": self.username, "file": [file.name for file in self.files]}
+        return {"user_id": self.user_id, "name": self.name, "username": self.username, "files": [file.name for file in self.files]}
 
 
 class Files(Base):

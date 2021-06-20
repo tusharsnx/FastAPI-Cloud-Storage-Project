@@ -1,14 +1,37 @@
 from pydantic import BaseModel, Field
-from uuid import UUID
-import uuid
 from datetime import date
-from typing import Optional
+from uuid import UUID
+from datetime import date
+from typing import Optional, List
+
+
+# Request models
+
 
 class User(BaseModel):
     name: str
     username: str
-    
-# class AddFile(BaseModel):
-# print(BlogsUpdate.schema())
+
+
+# Response models
+
+# for user details
+class FileDetails(BaseModel):
+    file_id: UUID
+    file_name: str
+    file_path: str
+    date_added: date
+    username: str
+
+# for file details
+class UserDetails(BaseModel):
+    user_id: UUID
+    name: str
+    username: str
+    files: List
+
+
+
+
 
 

@@ -10,3 +10,9 @@ def file_save(file, path):
 def file_delete(path):
     if os.path.exists(path):
         os.remove(path)
+
+def file_exists(path):
+    if os.path.exists(path):
+        return True
+    else:
+        return False

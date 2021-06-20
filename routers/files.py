@@ -1,10 +1,7 @@
 from fastapi import APIRouter
-import requests
+from typing import List
 from fastapi import BackgroundTasks, File, UploadFile, HTTPException
-from starlette.requests import Request
-from starlette.responses import FileResponse
 from database.crud import read_file, delete_file, create_file
-from fastapi.responses import FileResponse
 import utils
 from fastapi.security import OAuth2PasswordBearer
 
@@ -31,7 +28,7 @@ async def remove_file(file_id: str, tasks: BackgroundTasks, username: str):
 
 
 @router.get("/{username}/{file_id}")
-async def get_file(file_id: str, username: int):
+async def get_file(file_id: str, username: str):
     response = read_file(file_id = file_id, username=username)
     if response is None:
         raise HTTPException(status_code=401, detail="file not found")
