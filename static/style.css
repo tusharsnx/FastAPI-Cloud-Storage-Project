@@ -1,0 +1,111 @@
+
+.logo-gradient{
+	background: linear-gradient(to right, #ff5252 0%, #ff9800 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+.btn-grad {background-image: linear-gradient(to right, #ff5252 0%, #ff9800 100%)}
+.btn-grad {
+   /* margin: 0 400px; */
+   text-align: center;
+   /* text-transform: uppercase; */
+   transition: 0.5s;
+   background-size: auto;
+   color: white;            
+   border-radius: 10px;
+   /* display: block; */
+ }
+
+ .btn-grad:hover {
+   background-position: right center; /* change the direction of the change here */
+   color: #fff;
+   box-shadow: 0 0 20px #eee;
+   text-decoration: none;
+ }
+
+nav ul a{
+  color: white;
+}
+
+nav, .sidenav{
+    background-color: #202020;
+}
+
+footer{
+    background-color: #202020;
+    padding-top: 10px;
+}
+
+body{
+    background-color: #000000 ;
+}
+
+.dark-card{
+    background-color: #404040;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.sidenav-trigger {
+  color: #404040;
+}
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+    width: 100%;
+}
+
+.icon-block {
+  padding: 3 15 0 15;
+  margin-top: 20;
+  background-color: #404040;
+  border-radius: 20px;
+  min-height: 500;
+}
+
+.icon-block p{
+    color: #e9e9e9;
+}
+
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+
+footer.page-footer {
+  margin: 0;
+}
+
+.parallax
+{
+    background-color: #000000;
+}
+
+
+@media only screen and (max-width : 992px) {
+    .parallax-container .section {
+      position: absolute;
+      top: 40%;
+    }
+    #index-banner .section {
+      top: 10%;
+    }
+  }
+
+@media only screen and (max-width : 600px) {
+    #index-banner .section {
+      top: 0;
+    }
+    .icon-block{
+        min-height: 350;
+    }
+  }

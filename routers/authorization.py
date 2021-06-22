@@ -28,6 +28,9 @@ DOMAIN = config["DOMAIN"]
 
 
 class OAuth2Handler:
+    '''
+    class for handling all authorization related operations including verfying and decoding jwt
+    '''
 
     def __init__(self, client_secret, client_id, redirect_url, scope):
 
@@ -132,27 +135,26 @@ async def callback(request: Request, response: Response, task: BackgroundTasks):
     task.add_task(create_new_user, name=decoded_data["name"], username=decoded_data["email"])
     
     # redirecting to main page
-    response = RedirectResponse(url=f"{DOMAIN}/profile")
+    response = RedirectResponse(url=f"{DOMAIN}/home")
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
 
-
+# route for logging out which deletes the cookie from the browser
 @router.get("/logout")
 async def logout(response: Response):
-    response = RedirectResponse(url="http://localhost:8000/profile")
+    response = RedirectResponse(url=f"{DOMAIN}/home")
     response.delete_cookie("token")
     return response
 
-
+# background task for creating new user
 async def create_new_user(name, username):
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{DOMAIN}/api/users/{username}") as resp:
             data = await resp.json()
-            print(data)
             if resp.status!=200:
-                data = { "username": username, "name": name}
-                async with session.post(f"{DOMAIN}/api/users", json=data) as response2:
-                    print(response2.status)
+                data = {"username": username, "name": name}
+                await session.post(f"{DOMAIN}/api/users", json=data)
+
 
 
 

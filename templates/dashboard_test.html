@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block body%}
-  {% if user_files|length %}
-    {% for i in user_files %}
-      <table class="table">
-        {{i}}
-      </table>
-    {% endfor %}
-    {% else %}
-    no files found
-  {% endif %}
+    {% if user_files|length %}
+        {% for i in user_files %}
+        <table class="table">
+            {{i}}
+        </table>
+        {% endfor %}
+        {% else %}
+        <h1>no files found</h1>
+    {% endif %}
+
+    <h1>Adding Files</h1>
+    <form action="/upload">
+        <div class="btn">add your files here</div>
+        <button class="submit" type="submit">submit</button>
+    </form>
 {% endblock %}

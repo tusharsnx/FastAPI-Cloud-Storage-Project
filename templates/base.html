@@ -1,16 +1,93 @@
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <title>Document</title>
+     <!--Import Google Icon Font-->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <!--Import materialize.css-->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+     <!-- Import custom css -->
+     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <title>Home</title>
 </head>
 
 <body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    {% block body%}
-    {% endblock %}
+    <nav role="navigation">
+        <div class="nav-wrapper container">
+        <a id="logo-container" href="{{ request.url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
+        <ul class="right hide-on-med-and-down">
+            <!-- <li><a href="#">Navbar Link</a></li> -->
+            <li>
+                {% if user %}
+                    <a href="#">{{user["name"]}}</a>
+                {% else %}
+                    <a class="btn white-text" href="/auth/login" style="background-color: #404040;" >
+                        <div class="left">
+                            <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                        </div>
+                        Login with Google
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+
+        <ul id="nav-mobile" class="sidenav">
+            <!-- <li><a href="#">Navbar Link</a></li> -->
+            <li> 
+                {% if user %}
+                    <a href="#" class="white-text">{{user["name"]}}</a>
+                {% else %}
+                    <a class="btn white-text" href="/auth/login" style="background-color: #404040;">
+                        <div class="left">
+                            <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                        </div>
+                        Login with Google
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    {% block body %}{% endblock %}
+    <!-- <img src="./images/linkedin.png" alt="" class="circle responsive-img"> -->
+    <footer>
+        <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text header">Company Bio</h5>
+                    <p class="white-text">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+            </div>
+            <!-- <div class="col l3 s12">
+            <h5 class="white-text">Settings</h5>
+            <ul>
+                <li><a class="white-text" href="#!">Link 1</a></li>
+                <li><a class="white-text" href="#!">Link 2</a></li>
+                <li><a class="white-text" href="#!">Link 3</a></li>
+                <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+            </div> -->
+            <div class="col l6 s12 right-align">
+                <h5 class="white-text">Connect</h5>
+                    <ul>
+                        <li><a class="white-text" href="#!">Github</a></li>
+                        <li><a class="white-text container " href="https://www.linkedin.com/in/tushar-singh-a0862617a/">LinkedIn</a></li>
+                    </ul>
+            </div>
+        </div>
+        </div>
+        <div class="footer-copyright">
+        <div class="container">
+            <div class="right-align grey-text">
+                Made by <a class="white-text ">Tushar Singh</a>
+            </div>
+        </div>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{{ url_for('static', path='/js/init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    {% block extra_scripts %}{% endblock %}
 </body>
