@@ -111,7 +111,7 @@ auth = OAuth2Handler(
     )
 
 
-router = APIRouter(prefix="/auth", tags=["authorization"])
+router = APIRouter(prefix="/auth", tags=["authorization"], include_in_schema=False)
 
 
 # redirects to auth server if not logged in

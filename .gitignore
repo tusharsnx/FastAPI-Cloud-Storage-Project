@@ -2,6 +2,6 @@
 /env/
 /tests/
 __pycache__/
-/uploaded/*.*
+/uploaded/*
 /config.json
 /test.py

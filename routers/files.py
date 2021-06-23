@@ -10,6 +10,7 @@ auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.post("/{username}")
 async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = File(...)):
+    print("inside backend ", file.filename)
     # 'file' attributes are filename, file(file-like object)
     response = create_file(username = username, file_name = file.filename)
     if response is None:

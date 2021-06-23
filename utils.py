@@ -6,7 +6,7 @@ import os
 def file_save(file, path):
     with open(path, "wb") as f:
         shutil.copyfileobj(file.file, f)
-
+        
 def file_delete(path):
     if os.path.exists(path):
         os.remove(path)
