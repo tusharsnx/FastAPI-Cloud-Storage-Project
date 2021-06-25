@@ -52,6 +52,7 @@
                     <div class="header white-text" style="margin-top:20; font-size: 80;">Files</div>
                 </div>
 
+                {%if user_files|length > 0 %}
                 <!-- file list -->
                 <div class="scroll">
                     <div id="file-list" style="margin: 10 20;">
@@ -97,6 +98,10 @@
                     </div>
                     <div class="shade"></div>
                 </div>
+
+                {% else %}
+                    <div class="white-text" style=" padding: 20px;font-size: 20px;">No Files Found</div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -80,11 +80,12 @@ async def dashboard(request: Request, user: User = Depends(get_current_user)):
     if user is None:
         return RedirectResponse(url=f"{DOMAIN}/home")
 
-    user_files = None
+    response = []
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{DOMAIN}/api/users/{user.username}/files") as resp:
             user_files = await resp.json()
-    response = [{"file_name": file["file_name"], "date_added": file["date_added"], "file_id": file["file_id"]} for file in user_files]
+    if user_files:
+        response = [{"file_name": file["file_name"], "date_added": file["date_added"], "file_id": file["file_id"]} for file in user_files]
     return template.TemplateResponse("dashboard.html",{"request": request, "user": user.dict(), "user_files": response})
 
 # route for uploading files
