@@ -134,7 +134,7 @@ async def callback(request: Request, response: Response, task: BackgroundTasks):
     print("added task")
 
     # redirecting to main page
-    response = RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
+    response = RedirectResponse(url=f"{DOMAIN}/home")
 
     print("redirected")
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
@@ -143,7 +143,7 @@ async def callback(request: Request, response: Response, task: BackgroundTasks):
 # route for logging out which deletes the cookie from the browser
 @router.get("/logout")
 async def logout(response: Response):
-    response = RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
+    response = RedirectResponse(url=f"{DOMAIN}/home")
     response.delete_cookie("token")
     return response
 
@@ -152,13 +152,13 @@ async def create_new_user(name, username):
 
     # checking if user exists
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"http://localhost:{PORT}/api/users/{username}") as resp:
+        async with session.get(f"http://localhost:8000/api/users/{username}") as resp:
             data = await resp.json()
 
             if resp.status!=200:
                 # user does not exists
                 data = {"username": username, "name": name}
-                await session.post(f"http://localhost:{PORT}/api/users", json=data)
+                await session.post(f"http://localhost:8000/api/users", json=data)
 
 
 

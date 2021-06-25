@@ -49,13 +49,13 @@ async def index(request: Request, user: User = Depends(get_current_user)):
 @router.get("/download/{file_id}")
 async def file_download(file_id: str, request: Request, user: User = Depends(get_current_user)):
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
+        return RedirectResponse(url=f"{DOMAIN}/home")
 
     file = None
     
     # fetches file details from the database using api call
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}:{PORT}/api/files/{user.username}/{file_id}") as resp:
+        async with session.get(f"{DOMAIN}/api/files/{user.username}/{file_id}") as resp:
             file = await resp.json()
 
             # file details not available
@@ -64,7 +64,7 @@ async def file_download(file_id: str, request: Request, user: User = Depends(get
 
         # if details exist but file does not exists in the directory
         if not utils.file_exists(file["file_path"]):
-            await session.delete(f"{DOMAIN}:{PORT}/api/files/{user.username}/{file_id}")
+            await session.delete(f"{DOMAIN}/api/files/{user.username}/{file_id}")
             return template.TemplateResponse("file_not_found.html", {"request": request})
 
     # return file, if exists
@@ -78,11 +78,11 @@ async def dashboard(request: Request, user: User = Depends(get_current_user)):
     shows all user's files in a html page.
     '''
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
+        return RedirectResponse(url=f"{DOMAIN}/home")
 
     user_files = None
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}:{PORT}/api/users/{user.username}/files") as resp:
+        async with session.get(f"{DOMAIN}/api/users/{user.username}/files") as resp:
             user_files = await resp.json()
     response = [{"file_name": file["file_name"], "date_added": file["date_added"], "file_id": file["file_id"]} for file in user_files]
     return template.TemplateResponse("dashboard.html",{"request": request, "user": user.dict(), "user_files": response})
@@ -100,5 +100,5 @@ async def upload_file(file: UploadFile, username: str):
     async with aiohttp.ClientSession() as session:
         data = aiohttp.FormData(quote_fields=False)
         data.add_field('file', file.file.read(), filename=file.filename)
-        await session.post(f"{DOMAIN}:{PORT}/api/files/{username}", data=data)
+        await session.post(f"{DOMAIN}/api/files/{username}", data=data)
 
