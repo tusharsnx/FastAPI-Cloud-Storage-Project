@@ -18,7 +18,7 @@ CLIENT_SECRET = config["CLIENT_SECRET"]
 SCOPE = config["SCOPE"]
 DOMAIN = config["DOMAIN"]
 PORT = config["PORT"]
-LOCALHOST = cofig["LOCALHOST"]
+LOCALHOST = config["LOCALHOST"]
 
 
 class OAuth2Handler:
