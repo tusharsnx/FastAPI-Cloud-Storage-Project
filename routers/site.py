@@ -38,6 +38,7 @@ async def get_current_user(request: Request):
         return None
 
 
+@router.get("/")
 @router.get("/home", name="home")
 async def index(request: Request, user: User = Depends(get_current_user)):
     if user is None:
