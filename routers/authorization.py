@@ -153,13 +153,13 @@ async def create_new_user(name, username):
 
     # checking if user exists
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"http://{LOCALHOST}/api/users/{username}") as resp:
+        async with session.get(f"{DOMAIN}/api/users/{username}") as resp:
             data = await resp.json()
 
             if resp.status!=200:
                 # user does not exists
                 data = {"username": username, "name": name}
-                await session.post(f"http://{LOCALHOST}/api/users", json=data)
+                await session.post(f"{DOMAIN}/api/users", json=data)
 
 
 
