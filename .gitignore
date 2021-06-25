@@ -3,4 +3,4 @@
 /tests/
 __pycache__/
 /uploaded/*
-/config.json
+# /config.json

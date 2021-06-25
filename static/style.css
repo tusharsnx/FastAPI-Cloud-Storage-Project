@@ -19,7 +19,7 @@
 }
 
 .btn{
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .btn:hover, .btn:focus{
@@ -123,8 +123,14 @@ footer{
 
 .upload-dashboard{
     background-color: #202020;
-    height: 200;
+    height: 400;
     border-radius: 10px;
+}
+
+
+.upload-option{
+    animation: ease-in-out;
+    
 }
 
 .file-dashboard{
@@ -136,17 +142,40 @@ footer{
 
 #file-list{
     overflow-y: scroll;
+    /* background-color: #000000; */
     height: 420;
 }
 
+.scroll{
+    position: relative;
+}
+
+.shade{
+    position:absolute; 
+    height: 27px; 
+    left: 0px;
+    right: 0px;
+    top: 403px;
+    z-index:10;
+    /* background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(152,152,152,0) 40%, rgba(23,23,23,1) 90%, rgba(0,0,0,1) 99%); /* FF3.6+ */
+    /* background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(40%,rgba(152,152,152,0)), color-stop(90%,rgba(23,23,23,1)), color-stop(99%,rgba(0,0,0,1))); Chrome,Safari4+ */
+    /* background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(152,152,152,0) 40%,rgba(23,23,23,1) 90%,rgba(0,0,0,1) 99%); Chrome10+,Safari5.1+ */
+    /* background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(152,152,152,0) 40%,rgba(23,23,23,1) 90%,rgba(0,0,0,1) 99%); Opera 11.10+ */
+    /* background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(152,152,152,0) 40%,rgba(23,23,23,1) 90%,rgba(0,0,0,1) 99%); IE10+ */ 
+    background: linear-gradient(to bottom, rgb(0 0 0/ 0%) 0%,rgb(0 0 0 / 100%) 70%); /* W3C */
+}
+
 .file-dashboard .card{
-    background-color: #404040;
+    
     transition: 0.4s;
     border-radius: 10px;
+    border: solid 1px #e9e9e9;
+    background-color: #000000;
 }
 
 .file-dashboard .card:hover{
     box-shadow: rgba(82, 140, 234, 0.25) 0px 8px 30px, rgba(82, 140, 234, 0.25) 0px -12px 30px, rgba(82, 140, 234, 0.25) 0px 4px 30px, rgba(82, 140, 234, 0.25) 0px 12px 30px, rgba(82, 140, 234, 0.25) 0px -3px 30px;
+    background-color: #404040;
     /* box-shadow: rgba(82, 140, 234, 0.2) 0px 10px 30px 2px, rgba(82, 140, 234, 0.2) 10px 2px 30px 2px, rgba(82, 140, 234, 0.2) 0px 20px 30px 2px; */
 }
 
