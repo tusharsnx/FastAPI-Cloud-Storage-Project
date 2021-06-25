@@ -99,7 +99,7 @@ class OAuth2Handler:
 auth = OAuth2Handler(
     client_secret=CLIENT_SECRET, 
     client_id=CLIENT_ID, 
-    redirect_url=DOMAIN+":"+PORT+"/auth/callback", 
+    redirect_url=DOMAIN+"/auth/callback", 
     scope=SCOPE
     )
 
