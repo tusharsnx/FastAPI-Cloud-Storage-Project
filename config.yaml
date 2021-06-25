@@ -7,3 +7,4 @@
   # DOMAIN: "http://localhost:8000"
   DOMAIN: "https://fastapi-cloud-storage.herokuapp.com"
   PORT: "8000"
+  LOCALHOST: "http://127.0.0.1:8000"
