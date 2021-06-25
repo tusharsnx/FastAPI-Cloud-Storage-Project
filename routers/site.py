@@ -8,60 +8,54 @@ from .authorization import auth
 from uuid import uuid4
 import utils
 import aiohttp
-import json
+import yaml
 
 # loading domain url
-with open('config.json', 'r') as f:
-    config = json.load(f)
+with open('config.yaml', 'r') as f:
+    config = yaml.load(f)
 
 DOMAIN = config["DOMAIN"]
+PORT = config["PORT"]
+
 TEMP_PATH = "/temp"
 
 router = APIRouter(default_response_class=HTMLResponse, include_in_schema=False)
 template = Jinja2Templates(directory="templates")
 
+# dependency for getting user info before serving user
 async def get_current_user(request: Request):
     token = request.cookies.get("token")
-
     # cookie contains token
     if token:
         data = await auth.decode_token(token)
-        
         # token is still valid
         if data:
             return User(name=data["name"], username=data["email"])
-        
         else:
             return None
-    
     else:
         return None
 
-
+# route for home page
 @router.get("/")
 @router.get("/home", name="home")
 async def index(request: Request, user: User = Depends(get_current_user)):
     if user is None:
-    #     # return RedirectResponse(url="http://localhost:8000/login")
         return template.TemplateResponse("home.html", {"request": request, "user": None})
     else:
         return template.TemplateResponse("home.html", {"request": request, "user": {"name": user.name, "username": user.username}})
 
-
-@router.get("/logout")
-async def logout(request: Request):
-    return template.TemplateResponse("logout_test.html", {"request": request})
-
+# route for downloading files
 @router.get("/download/{file_id}")
 async def file_download(file_id: str, request: Request, user: User = Depends(get_current_user)):
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}/home")
+        return RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
 
     file = None
     
     # fetches file details from the database using api call
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}/api/files/{user.username}/{file_id}") as resp:
+        async with session.get(f"{DOMAIN}:{PORT}/api/files/{user.username}/{file_id}") as resp:
             file = await resp.json()
 
             # file details not available
@@ -70,43 +64,41 @@ async def file_download(file_id: str, request: Request, user: User = Depends(get
 
         # if details exist but file does not exists in the directory
         if not utils.file_exists(file["file_path"]):
-            await session.delete(f"{DOMAIN}/api/files/{user.username}/{file_id}")
+            await session.delete(f"{DOMAIN}:{PORT}/api/files/{user.username}/{file_id}")
             return template.TemplateResponse("file_not_found.html", {"request": request})
 
     # return file, if exists
     return FileResponse(file["file_path"], filename=file["file_name"])
     
 
+# route for file dashboard page
 @router.get("/dashboard", name="dashboard")
 async def dashboard(request: Request, user: User = Depends(get_current_user)):
     '''
     shows all user's files in a html page.
     '''
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}/home")
+        return RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
 
     user_files = None
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}/api/users/{user.username}/files") as resp:
+        async with session.get(f"{DOMAIN}:{PORT}/api/users/{user.username}/files") as resp:
             user_files = await resp.json()
     response = [{"file_name": file["file_name"], "date_added": file["date_added"], "file_id": file["file_id"]} for file in user_files]
     return template.TemplateResponse("dashboard.html",{"request": request, "user": user.dict(), "user_files": response})
 
+# route for uploading files
 @router.post("/upload", response_class=JSONResponse)
 async def upload(task: BackgroundTasks, user: UserDetails = Depends(get_current_user), file: UploadFile = File(...)):
     task.add_task(upload_file, file=file, username=user.username)
     print(file.content_type, file.filename)
     return {"detail": "Uploaded Successfully"}
 
-
+# background task for saving files
 async def upload_file(file: UploadFile, username: str):
     # utils.file_save(path=TEMP_PATH+f"/{uuid4()}", file=file)
-    
     async with aiohttp.ClientSession() as session:
-        # print(type(file.file), type(file.file.read()))
-        # print(type(open('routers/users.py', "rb")))
         data = aiohttp.FormData(quote_fields=False)
-        # print("inside frontend ", file.filename)
         data.add_field('file', file.file.read(), filename=file.filename)
-        await session.post(f"{DOMAIN}/api/files/{username}", data=data)
+        await session.post(f"{DOMAIN}:{PORT}/api/files/{username}", data=data)
 

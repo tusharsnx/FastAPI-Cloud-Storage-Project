@@ -6,18 +6,18 @@ from jose import jwt
 from uuid import uuid4
 import aiohttp
 import asyncio
-import json
+import yaml
 
 # loading config for authorization
-with open('config.json', 'r') as f:
-    config = json.load(f)
+with open('config.yaml', 'r') as f:
+    config = yaml.load(f)
 
 SECRET = config["SECRET"]
 CLIENT_ID = config["CLIENT_ID"]
 CLIENT_SECRET = config["CLIENT_SECRET"]
-REDIRECT_URI = config["REDIRECT_URI"]
 SCOPE = config["SCOPE"]
 DOMAIN = config["DOMAIN"]
+PORT = config["PORT"]
 
 
 class OAuth2Handler:
@@ -99,7 +99,7 @@ class OAuth2Handler:
 auth = OAuth2Handler(
     client_secret=CLIENT_SECRET, 
     client_id=CLIENT_ID, 
-    redirect_url=REDIRECT_URI, 
+    redirect_url=DOMAIN+":"+PORT+"/auth/callback", 
     scope=SCOPE
     )
 
@@ -128,25 +128,29 @@ async def callback(request: Request, response: Response, task: BackgroundTasks):
     task.add_task(create_new_user, name=decoded_data["name"], username=decoded_data["email"])
     
     # redirecting to main page
-    response = RedirectResponse(url=f"{DOMAIN}/home")
+    response = RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
 
 # route for logging out which deletes the cookie from the browser
 @router.get("/logout")
 async def logout(response: Response):
-    response = RedirectResponse(url=f"{DOMAIN}/home")
+    response = RedirectResponse(url=f"{DOMAIN}:{PORT}/home")
     response.delete_cookie("token")
     return response
 
-# background task for creating new user
+# background task for creating new user if not exist already
 async def create_new_user(name, username):
+
+    # checking if user exists
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{DOMAIN}/api/users/{username}") as resp:
+        async with session.get(f"http://localhost:{PORT}/api/users/{username}") as resp:
             data = await resp.json()
+
             if resp.status!=200:
+                # user does not exists
                 data = {"username": username, "name": name}
-                await session.post(f"{DOMAIN}/api/users", json=data)
+                await session.post(f"http://localhost:{PORT}/api/users", json=data)
 
 
 
