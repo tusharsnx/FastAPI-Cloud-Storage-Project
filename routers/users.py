@@ -15,7 +15,6 @@ auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get("/", response_model=List[UserDetails])
 async def users_list(request: Request, limit: int = 10):
-    # return request.headers["Authorization"]
     return read_users(limit = limit)
 
 
@@ -46,7 +45,7 @@ async def add_user(user: User):
 async def remove_user(username: str, task: BackgroundTasks):
     response = delete_user(username = username)
     if not response:
-        raise HTTPException(400, detail="user not found!!")
+        raise HTTPException(404, detail="user not found!!")
     for path in response:
         task.add_task(utils.file_delete, path=path)
     return {"detail": "operation successful"}

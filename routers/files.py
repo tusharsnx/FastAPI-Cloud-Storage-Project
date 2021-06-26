@@ -30,7 +30,7 @@ async def remove_file(file_id: str, tasks: BackgroundTasks, username: str):
     response = delete_file(file_id=file_id, username=username)
     if not response:
         raise HTTPException(400, detail="user's file not found!!")
-    tasks.add_task(utils.file_delete, path=response)
+    tasks.add_task(utils.file_delete, path=response.path)
     return {"detail": "operation successful"}
 
 
@@ -41,7 +41,3 @@ async def get_file(file_id: str, username: str):
         raise HTTPException(status_code=401, detail="file not found")
     else:
         return response
-
-# @router.get("/download/{file_id}", response_model=FileResponse)
-# def download_file(file_id: str):
-#     response = requests.get()

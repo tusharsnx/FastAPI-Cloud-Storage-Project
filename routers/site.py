@@ -95,8 +95,16 @@ async def upload(task: BackgroundTasks, user: UserDetails = Depends(get_current_
         return RedirectResponse(url=f"{DOMAIN}/auth/login")
 
     task.add_task(upload_file, file=file, username=user.username)
-    print(file.content_type, file.filename)
     return {"detail": "Uploaded Successfully"}
+
+@router.get("/delete/{file_id}", response_class=HTMLResponse)
+async def delete(request: Request, file_id: str, user: User = Depends(get_current_user)):
+    async with aiohttp.ClientSession() as session:
+        async with session.delete(f"{DOMAIN}/api/files/{user.username}/{file_id}") as resp:
+            if resp.status!=200:
+                return template.TemplateResponse("file_not_found.html", {"request": Request})
+
+    return RedirectResponse(url=f"{DOMAIN}/dashboard")
 
 # background task for saving files
 async def upload_file(file: UploadFile, username: str):

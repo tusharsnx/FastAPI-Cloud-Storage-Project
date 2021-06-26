@@ -13,53 +13,53 @@
 
 <body>
     <nav role="navigation">
-        <div class="nav-wrapper container">
-        <a id="logo-container" href="{{ request.url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
-        <ul class="right hide-on-med-and-down">
-            <!-- <li><a href="#">Navbar Link</a></li> -->
-            <li>
-                {% if user %}
-                    <!-- Dropdown Trigger -->
-                    <a id="nav-header" class='dropdown-trigger' href='#' data-target='dropdown1'>{{user["name"]}}</a>
+        <div class="nav-wrapper">
+            <a id="logo-container" href="{{ request.url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
+            <ul class="right hide-on-med-and-down">
+                <!-- <li><a href="#">Navbar Link</a></li> -->
+                <li>
+                    {% if user %}
+                        <!-- Dropdown Trigger -->
+                        <a id="nav-header" class='dropdown-trigger' href='#' data-target='dropdown1'>{{user["name"]}}</a>
 
-                    <!-- Dropdown Structure -->
-                    <ul id='dropdown1' class='dropdown-content drk-bg' >
-                        <li><a href="/auth/logout" class="center white-text">Logout</span></a></li>
-                    </ul>
-                {% else %}
-                    <a id = "btn" class="btn white-text drk-bg" href="/auth/login" >
-                        <div class="left">
-                            <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-                        </div>
-                        Login with Google
-                    </a>
-                {% endif %}
-            </li>
-        </ul>
+                        <!-- Dropdown Structure -->
+                        <ul id='dropdown1' class='dropdown-content drk-bg' >
+                            <li><a href="/auth/logout" class="center white-text">Logout</span></a></li>
+                        </ul>
+                    {% else %}
+                        <a id = "btn" class="btn white-text drk-bg" href="/auth/login" >
+                            <div class="left">
+                                <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                            </div>
+                            Login with Google
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
 
-        <ul id="nav-mobile" class="sidenav">
-            <li> 
-                {% if user %}
-                    <ul class="collapsible">
-                        <li>
-                            <div id="nav-header" class="collapsible-header">{{user["name"]}}</div>
-                            <div class="container collapsible-body drk-bg" style="margin-top: 10px"><a href="/auth/logout" class="center white-text">Logout</span></a></div>
-                        </li>
-                    </ul>
-                    <a href="#" class="white-text"></a>
-                {% else %}
-                    <a class="btn white-text" href="/auth/login" style="background-color: #404040;">
-                        <div class="left">
-                            <img width="30px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-                        </div>
-                        Login with Google
-                    </a>
-                {% endif %}
-            </li>
-        </ul>
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="sidenav">
+                <li> 
+                    {% if user %}
+                        <ul class="collapsible">
+                            <li>
+                                <div id="nav-header" class="collapsible-header center" style="display:block;">{{user["name"]}}</div>
+                                <div class="container collapsible-body drk-bg" style="margin-top: 10px"><a href="/auth/logout" class="center white-text">Logout</span></a></div>
+                            </li>
+                        </ul>
+                        <a href="#" class="white-text"></a>
+                    {% else %}
+                        <a class="btn white-text" href="/auth/login" style="background-color: #404040;">
+                            <div class="left">
+                                <img width="30px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                            </div>
+                            Login with Google
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
     </nav>
     {% block body %}{% endblock %}
@@ -70,18 +70,10 @@
         <div class="container">
         <div class="row">
             <div class="col l6 s12">
-                <h5 class="white-text header">Company Bio</h5>
-                    <p class="white-text">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+                <h5 class="white-text header">Project Detail</h5>
+                    <p class="white-text">It is an open source cloud project development. If you have feature idea that you can implement and improve this project then you are welcome. Any PR is greatly appreciated.</p>
             </div>
-            <!-- <div class="col l3 s12">
-            <h5 class="white-text">Settings</h5>
-            <ul>
-                <li><a class="white-text" href="#!">Link 1</a></li>
-                <li><a class="white-text" href="#!">Link 2</a></li>
-                <li><a class="white-text" href="#!">Link 3</a></li>
-                <li><a class="white-text" href="#!">Link 4</a></li>
-            </ul>
-            </div> -->
+        
             <div id="connect-section" class="col l6 s12 right-align">
                 <h5 class="white-text">Connect</h5>
                     <ul>

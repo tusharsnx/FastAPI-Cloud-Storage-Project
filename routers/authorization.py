@@ -1,5 +1,4 @@
 from fastapi import APIRouter, BackgroundTasks
-from models import User
 from fastapi.requests import Request
 from fastapi.responses import Response, RedirectResponse, HTMLResponse
 from jose import jwt
@@ -17,8 +16,6 @@ CLIENT_ID = config["CLIENT_ID"]
 CLIENT_SECRET = config["CLIENT_SECRET"]
 SCOPE = config["SCOPE"]
 DOMAIN = config["DOMAIN"]
-PORT = config["PORT"]
-LOCALHOST = config["LOCALHOST"]
 
 
 class OAuth2Handler:

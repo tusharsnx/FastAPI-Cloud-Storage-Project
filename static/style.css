@@ -2,6 +2,9 @@
 *{
     font-family: -apple-system, BlinkMacSystemFont, Roboto, 'Segoe UI',Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+.dark-mode-text{
+    color: #e0e0e0;
+}
 
 .logo-gradient{
 	background: linear-gradient(to right, #ff5252 0%, #ff9800 100%);
@@ -47,6 +50,10 @@
    text-decoration: none;
  }
 
+ .nav-wrapper{
+    padding: 0 50; 
+}
+
 nav ul a{
   color: white;
 }
@@ -77,7 +84,7 @@ body{
 }
 
 .dark-card{
-    background-color: #404040;
+    background-color: #202020;
 }
 
 p {
@@ -97,9 +104,9 @@ p {
 .icon-block {
   padding: 3 15 0 15;
   margin-top: 20;
-  background-color: #404040;
+  background-color: #202020;
   border-radius: 10px;
-  min-height: 400;
+  min-height: 320;
 }
 
 .icon-block p{
@@ -219,6 +226,10 @@ footer{
     .file-dashboard{
         /* margin-top: 20px; */
         margin: 20px;
+    }
+
+    .nav-wrapper{
+        padding: 0 20; 
     }
 
     .upload-dashboard{

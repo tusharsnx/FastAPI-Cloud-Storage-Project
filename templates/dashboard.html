@@ -13,10 +13,10 @@
                         <div class="collapsible-header" style="display:block; background-color: #202020; border: 0px;">
                             <div class="row">
                                 <div class="col s6">
-                                    <div class="white-text left-align" style="font-size: large;">Add Files</div>
+                                    <div class="dark-mode-text left-align" style="font-size: large;">Add Files</div>
                                 </div>
                                 <div class="col s1 offset-s4">
-                                    <a href="#"><i class="material-icons small white-text upload-option-trigger dropdown-trigger" data-target='upload-option'>add_circle_outline</i></a>
+                                    <a href="#"><i class="material-icons small orange-text darken-2-text upload-option-trigger dropdown-trigger" data-target='upload-option'>add_circle_outline</i></a>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                                         <input type="file"  id="file-input">
                                     </div>
                                     <div class="file-path-wrapper">
-                                        <input class="file-path validate white-text" type="text">
+                                        <input class="file-path validate dark-mode-text" type="text">
                                     </div>
                                 </div>
                             </form>
@@ -40,7 +40,7 @@
                             <div class="determinate" style="width: 0%"></div>
                         </div>
 
-                        <div class="response white-text center" style="font-size: larger; padding-bottom: 15px; display: none"></div>
+                        <div class="response dark-mode-text center" style="font-size: larger; padding-bottom: 15px; display: none"></div>
                     
                     </li>
                     </ul>
@@ -52,7 +52,7 @@
         <div class="col s12 m9 file-dashboard">
             <div  class="file-dashboard-content" >
                 <div class="container">
-                    <div class="header white-text" style="margin-top:20; font-size: 80;">Files</div>
+                    <div class="header dark-mode-text" style="margin-top:20; font-size: 80;">Files</div>
                 </div>
 
                 {%if user_files|length > 0 %}
@@ -65,13 +65,16 @@
                             {% for j in range(3) %}
                                     <div class="col s12 m4">
                                         <div class="card" style="padding: 10;">
-                                            <span class="white-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
-                                            <div class="row">
-                                                <div class = "col m6" style="padding-top: 10;">
-                                                    <a href="download/{{user_files[(3*i)+j].file_id}}"><i class="small left-align white-text material-icons">file_download</i></a>
+                                            <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
+                                            <div class="row" style="margin-bottom:0;">
+                                                <div class = "col s3" style="padding-top: 10;">
+                                                    <a href="download/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
                                                 </div>
-                                                <div class = "col m4 offset-m2">
-                                                    <div class="white-text" style="padding-top: 10px">{{user_files[(3*i)+j].date_added}}</div>
+                                                <div class = "col s3" style="padding-top: 10;">
+                                                    <a href="delete/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
+                                                </div>
+                                                <div class = "col s4 offset-s2">
+                                                    <div id="dates" class="dark-mode-text" style="padding-top: 15px">{{user_files[(3*i)+j].date_added}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,17 +84,20 @@
                         {% endfor %}
                         
                         <!-- for remaining files -->
-                        <div class="row" style="margin: 5 10px;">
+                        <div class="row" style="margin: 5px 10px;">
                             {% for i in range(3*rows, user_files|length) %}
                                 <div class="col s12 m4">
                                     <div class="card" style="padding: 10;">
-                                        <span class="white-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
-                                        <div class="row">
-                                            <div class = "col m6" style="padding-top: 10;">
-                                                <a href="download/{{user_files[i].file_id}}"><i class="small left-align white-text material-icons">file_download</i></a>
+                                        <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
+                                        <div class="row"   style="margin-bottom:0;">
+                                            <div class = "col s3" style="padding-top: 10;">
+                                                <a href="download/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
                                             </div>
-                                            <div class = "col m4 offset-m2">
-                                                <div class="white-text" style="padding-top: 10px">{{user_files[i].date_added}}</div>
+                                            <div class = "col s3" style="padding-top: 10;">
+                                                <a href="delete/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
+                                            </div>
+                                            <div class = "col s4 offset-s2">
+                                                <div  id="dates" class="dark-mode-text" style="padding-top: 10px">{{user_files[i].date_added}}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +109,7 @@
                 </div>
 
                 {% else %}
-                    <div class="white-text center" style=" padding: 20px;font-size: 60px;">No Files Found</div>
+                    <div class="dark-mode-text center" style=" padding: 20px;font-size: 60px;">No Files Found</div>
                 {% endif %}
             </div>
         </div>
@@ -116,8 +122,6 @@
 
 <script>
     $('document').ready(function () {
-
-        // $('.progress').hide();
 
         // triggers when file is selected
         $('#upload-button').click(function() {
@@ -175,11 +179,7 @@
 
         });
 
-        // $(".upload-option-trigger").click(function(){
-        //     console.log("hello i am clicked");
-        //     $(".upload-option").toggle();
-        // });
-
+        // to initialize upload-option collapsible
         $(document).ready(function(){
         $('.collapsible').collapsible();
   });

@@ -75,12 +75,11 @@ def get_files(username: str):
 
 # deletes user's file
 def delete_file(file_id: str, username: str):
-    response = None
     with dbsession() as session:
         file = session.query(Files).join(Users).filter(Files.file_id==file_id, Users.username==username).first()
         if file is None:
-            return response
-        response=file.path
+            return None
+        response=file
         session.delete(file)
         session.commit()
     return response
