@@ -4,3 +4,4 @@
 __pycache__/
 /uploaded/*
 # /config.json
+/db.db
