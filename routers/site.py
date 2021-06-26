@@ -15,7 +15,6 @@ with open('config.yaml', 'r') as f:
     config = yaml.load(f)
 
 DOMAIN = config["DOMAIN"]
-PORT = config["PORT"]
 
 TEMP_PATH = "/temp"
 
