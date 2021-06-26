@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard{% endblock %}
+
 {% block body%}
 
     <div class="row" style="margin-top: 50;">
@@ -134,7 +136,17 @@
                 return;
             }
             console.log(file.type)
-            const allowed_mime_types = ['text/plain', 'image/jpg', 'image/jpeg'];
+
+            // allowed file types
+            const allowed_mime_types = [
+                "application/msword", 
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+                'text/plain','text/docs','text/xls', 'text/ppt', "application/vnd.ms-excel", 
+                'image/jpg', 'image/jpeg', 'image/png', "video/mp4","application/pdf", 
+                "application/vnd.ms-powerpoint", "text/csv"
+            ];
+
+            // allowed file size
             const allowed_size_mb = 2;
         
             if(allowed_mime_types.indexOf(file.type) == -1) {
@@ -172,7 +184,7 @@
             //render progress bar
             $('.progress').show();
 
-            // send the data
+            // sends the data
             request.send(data);
             $(".response").show();
             $(".response").text("File Uploaded Successfully");
