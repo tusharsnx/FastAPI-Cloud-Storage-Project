@@ -123,17 +123,27 @@ footer{
 
 .upload-dashboard{
     background-color: #202020;
-    height: 400;
+    /* height: 100; */
     border-radius: 10px;
 }
 
+/* .upload-option-dropdown-content{
+    transition: max-height 1s;
+    max-height: 0; 
+} */
 
-.upload-option{
-    animation: ease-in-out;
-    
+.upload-option .collapsible-header{
+    padding-bottom: 10px;
+    border-radius: 10px;
 }
 
-.file-dashboard{
+.upload-option .collapsible-body{
+    padding: 0px 20;
+    padding-bottom: 30px;
+}
+
+
+.file-dashboard-content{
     height: 600;
     border: #e9e9e9 solid 1px;
     border-radius: 10px;
@@ -165,7 +175,7 @@ footer{
     background: linear-gradient(to bottom, rgb(0 0 0/ 0%) 0%,rgb(0 0 0 / 100%) 70%); /* W3C */
 }
 
-.file-dashboard .card{
+.file-dashboard-content .card{
     
     transition: 0.4s;
     border-radius: 10px;
@@ -173,9 +183,9 @@ footer{
     background-color: #000000;
 }
 
-.file-dashboard .card:hover{
+.file-dashboard-content .card:hover{
     box-shadow: rgba(82, 140, 234, 0.25) 0px 8px 30px, rgba(82, 140, 234, 0.25) 0px -12px 30px, rgba(82, 140, 234, 0.25) 0px 4px 30px, rgba(82, 140, 234, 0.25) 0px 12px 30px, rgba(82, 140, 234, 0.25) 0px -3px 30px;
-    background-color: #404040;
+    background-color: #202020;
     /* box-shadow: rgba(82, 140, 234, 0.2) 0px 10px 30px 2px, rgba(82, 140, 234, 0.2) 10px 2px 30px 2px, rgba(82, 140, 234, 0.2) 0px 20px 30px 2px; */
 }
 
@@ -205,6 +215,21 @@ footer{
     #index-banner .section {
       top: 0;
     }
+
+    .file-dashboard{
+        /* margin-top: 20px; */
+        margin: 20px;
+    }
+
+    .upload-dashboard{
+        /* margin-top: 20px; */
+        margin: 10px;
+    }
+
+    .file-dashboard-content{
+        margin: 10px;
+    }
+
     .icon-block{
         min-height: 350;
     }

@@ -49,7 +49,7 @@ async def index(request: Request, user: User = Depends(get_current_user)):
 @router.get("/download/{file_id}")
 async def file_download(file_id: str, request: Request, user: User = Depends(get_current_user)):
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}/home")
+        return RedirectResponse(url=f"{DOMAIN}/auth/login")
 
     file = None
     
@@ -78,7 +78,7 @@ async def dashboard(request: Request, user: User = Depends(get_current_user)):
     shows all user's files in a html page.
     '''
     if user is None:
-        return RedirectResponse(url=f"{DOMAIN}/home")
+        return RedirectResponse(url=f"{DOMAIN}/auth/login")
 
     response = []
     async with aiohttp.ClientSession() as session:
@@ -91,6 +91,9 @@ async def dashboard(request: Request, user: User = Depends(get_current_user)):
 # route for uploading files
 @router.post("/upload", response_class=JSONResponse)
 async def upload(task: BackgroundTasks, user: UserDetails = Depends(get_current_user), file: UploadFile = File(...)):
+    if user is None: 
+        return RedirectResponse(url=f"{DOMAIN}/auth/login")
+
     task.add_task(upload_file, file=file, username=user.username)
     print(file.content_type, file.filename)
     return {"detail": "Uploaded Successfully"}
