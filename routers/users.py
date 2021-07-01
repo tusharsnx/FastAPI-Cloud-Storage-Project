@@ -1,17 +1,14 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from starlette.background import BackgroundTasks
 from typing import List, Dict
 from models import User, UserDetails, FileDetails
 from fastapi import HTTPException, Request
 from database.crud import delete_user, get_files, read_user, read_users, create_user
 import utils
-from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(tags=["users"], prefix="/api/users")
 
 scopes = {"user":"scopes"}
-
-auth = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get("/", response_model=List[UserDetails])
 async def users_list(request: Request, limit: int = 10):

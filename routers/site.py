@@ -1,20 +1,16 @@
-# from main import DOMAIN
 from fastapi import APIRouter, Depends, BackgroundTasks, UploadFile, File
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse, JSONResponse
 from models import User, UserDetails
 from .authorization import auth
-from uuid import uuid4
 import utils
 import aiohttp
 import yaml
+import os
 
-# loading domain url
-with open('config.yaml', 'r') as f:
-    config = yaml.load(f)
 
-DOMAIN = config["DOMAIN"]
+DOMAIN = os.environ["DOMAIN"]
 
 TEMP_PATH = "/temp"
 

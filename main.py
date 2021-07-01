@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from database.db import Base, engine
 from routers import users, files, authorization, site
 from fastapi.staticfiles import StaticFiles
-import os
 
 app = FastAPI()
 
@@ -17,6 +16,3 @@ app.include_router(site.router)
 
 # creates tables whose schemas are defined but not present in database file
 Base.metadata.create_all(engine)
-
-# if not os.path.exists("uploaded/"):
-#     os.mkdir("uploaded/")

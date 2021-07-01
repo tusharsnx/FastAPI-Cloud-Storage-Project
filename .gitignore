@@ -4,5 +4,4 @@
 __pycache__/
 /uploaded/*
 !/uploaded/dummy.txt
-# /config.json
 /db.db

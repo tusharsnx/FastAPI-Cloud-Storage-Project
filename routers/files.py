@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from typing import List
 from fastapi import BackgroundTasks, File, UploadFile, HTTPException
 from database.crud import read_file, delete_file, create_file
 import utils

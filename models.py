@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from datetime import date
 from uuid import UUID
 from datetime import date
-from typing import Optional, List
+from typing import List
 
 
 # Request models
