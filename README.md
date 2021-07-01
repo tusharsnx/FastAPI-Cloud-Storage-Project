@@ -12,8 +12,8 @@ To run on local environment, first we need to set some enviornment variables rel
 
 To run on heroku environment, we need to save config variable in heroku setting page
 -
-    CLIENT_ID = your client id from the google auth server
-    CLIENT_SECRET = your client secret from the google auth server
+    CLIENT_ID: your client id from the google auth server
+    CLIENT_SECRET: your client secret from the google auth server
     DOMAIN: your app domain name on heroku
-    SCOPE = authorization access scope
+    SCOPE: authorization access scope
 and then deploy the app
